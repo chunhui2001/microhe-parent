@@ -9,11 +9,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.reactive.config.EnableWebFlux;
 
 // 解决启动慢的问题
 // scutil --set HostName "localhost"
 // scutil --get HostName 命令查看是否生效
 @ComponentScan(basePackages = {"com.microhe"})
+@EnableWebFlux
 @SpringBootApplication
 public class App implements CommandLineRunner {
 
