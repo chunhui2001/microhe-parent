@@ -19,3 +19,5 @@ spring:
 logging:
   config: classpath:log4j2-test.xml
   kafka.servers: localhost:9092
+    
+# java -Dspring.profiles.active=dev-local -Dkafka.bootstrap.servers=localhost:9092 -Dspring.application.name=microhe-starter -jar target/microhe-starter-1.0-SNAPSHOT.jar 
