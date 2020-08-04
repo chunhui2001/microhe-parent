@@ -26,10 +26,7 @@ public class App implements CommandLineRunner {
     protected static ConfigurableApplicationContext startup(Class<?> clazz, String... args) {
         // debugger 时拿不到 implementation 相关信息
         SpringApplication app = new SpringApplication(clazz);
-        app.addInitializers((context) -> {
-            System.setProperty("appName", context.getEnvironment().getProperty("spring.application.name"));
-            System.setProperty("kafkaServers", context.getEnvironment().getProperty("logging.kafka.servers"));
-        });
+        app.addInitializers((context) -> { });
         List<String> _args = new ArrayList<>();
         _args.add(clazz.getName());
         if (args != null && args.length == 0) {

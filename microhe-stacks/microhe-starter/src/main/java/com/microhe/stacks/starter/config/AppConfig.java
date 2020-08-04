@@ -32,7 +32,6 @@ public class AppConfig implements ApplicationListener<ApplicationEvent> {
 
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
-        LOGGER.info("onApplicationEvent={}", event.getClass().getName());
         if (event instanceof ParentContextAvailableEvent) {
             onApplicationEnvironmentPreparedEvent((ParentContextAvailableEvent) event);
         }
@@ -43,18 +42,8 @@ public class AppConfig implements ApplicationListener<ApplicationEvent> {
     }
 
     private void onApplicationEnvironmentPreparedEvent(ParentContextAvailableEvent event) {
-//        List<EnvironmentPostProcessor> postProcessors = loadPostProcessors();
-//        postProcessors.add(new PostEnvironmentProcessor());
-//        AnnotationAwareOrderComparator.sort(postProcessors);
-//        for (EnvironmentPostProcessor postProcessor : postProcessors) {
-//            postProcessor.postProcessEnvironment(event.getEnvironment(),
-//                    event.getSpringApplication());
-//        }
-
         System.setProperty("appName", event.getApplicationContext().getEnvironment().getProperty("spring.application.name"));
         System.setProperty("kafkaServers", event.getApplicationContext().getEnvironment().getProperty("logging.kafka.servers"));
-        //LOGGER.info("onApplicationEnvironmentPreparedEvent={}", event.getApplicationContext().getEnvironment().getProperty("logging.kafka.servers"));
-        
     }
 
     List<EnvironmentPostProcessor> loadPostProcessors() {
