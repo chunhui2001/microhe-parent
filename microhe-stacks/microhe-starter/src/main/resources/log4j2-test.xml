@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Configuration status="WARN">
+    <properties>
+        <!-- Lookups, http://logging.apache.org/log4j/2.x/manual/lookups.html -->
+        <!-- log4j的PatternLayout参数含义, https://blog.csdn.net/garfielder007/article/details/82874529 -->
+        <property name="logPath">/tmp/log</property>
+        <property name="instance">${sys:spring.application.name}</property>
+        <property name="ENV">${sys:spring.profiles.active}</property>
+        <property name="KAFKA_SERVERS">${sys:kafka.bootstrap.servers}</property>
+        <!-- <property name="KAFKA_SERVERS">localhost:9092</property> -->
+        <!-- property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t][${ctx:appname}:_lid:%lid] %-5level %20.30c{1.}:%L - %M:『%r』>>> %msg%n</property-->
+        <!-- property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t][${ctx:appname}:_lid:%lid] %-5level [%20.30c{1.}:%L]『%r』 > %msg%n</property -->
+        <property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t][${instance}:_lid:%dd] %-5level [%logger{36}:%L]『%r』 > %msg%n</property>
+    </properties>
+    <Appenders>
+        <!-- trace, info, warn, debug, error -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <!-- 只输出 trace level 及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
+            <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout header=" - ${java:runtime} %n - ${java:vm} %n - ${java:os}%n" pattern="${PATTERN}" />
+        </Console>
+        <Kafka name="kafkaAppender" topic="first-topic">
+            <LogstashLayout dateTimeFormatPattern="yyyy-MM-dd'T'HH:mm:ss.SSSZZZ"
+                            eventTemplateUri="classpath:LogstashJsonEventLayoutV1.json"
+                            prettyPrintEnabled="true"
+                            stackTraceEnabled="true">
+                <EventTemplateAdditionalFields>
+                    <KeyValuePair key="env" value="${ENV}"/>
+                </EventTemplateAdditionalFields>                
+            </LogstashLayout>
+            <Property name="bootstrap.servers">${KAFKA_SERVERS}</Property>
+        </Kafka>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info" includeLocation="true">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="kafkaAppender"/>
+        </Root>
+        <Logger name="org.springframework" level="WARN" />
+        <Logger name="org.springframework.web.servlet.PageNotFound" level="ERROR" />
+        <!-- <Logger name="org.hibernate.validator" level="WARN"/> -->
+        <Logger name="org.apache.tomcat" level="INFO" />
+        <Logger name="org.apache.catalina" level="INFO" />
+        <Logger name="org.apache.coyote" level="INFO" />
+        <Logger name="com.netflix" level="WARN" />
+        <logger name="org.mybatis" level="WARN" />
+        <logger name="org.mongodb" level="WARN" />
+        <logger name="org.apache.kafka" level="WARN" />
+        <Logger name="org.apache.zookeeper" level="WARN" />
+        <Logger name="org.apache.curator" level="WARN" />
+    </Loggers>
+</Configuration>

@@ -1,0 +1,21 @@
+
+spring:
+  profiles:
+    active: local
+  application:
+    name: microhe-starter
+
+---
+spring:
+  profiles: local,dev-local
+logging:
+  config: classpath:log4j2-local.xml
+  kafka.servers: localhost:9092
+  
+
+---
+spring:
+  profiles: test-1, test-2
+logging:
+  config: classpath:log4j2-test.xml
+  kafka.servers: localhost:9092

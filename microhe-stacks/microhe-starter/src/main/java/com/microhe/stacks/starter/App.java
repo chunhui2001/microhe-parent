@@ -9,13 +9,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.web.reactive.config.EnableWebFlux;
 
 // 解决启动慢的问题
 // scutil --set HostName "localhost"
 // scutil --get HostName 命令查看是否生效
 @ComponentScan(basePackages = {"com.microhe"})
-@EnableWebFlux
 @SpringBootApplication
 public class App implements CommandLineRunner {
 
@@ -28,6 +26,10 @@ public class App implements CommandLineRunner {
     protected static ConfigurableApplicationContext startup(Class<?> clazz, String... args) {
         // debugger 时拿不到 implementation 相关信息
         SpringApplication app = new SpringApplication(clazz);
+        app.addInitializers((context) -> {
+            System.setProperty("appName", context.getEnvironment().getProperty("spring.application.name"));
+            System.setProperty("kafkaServers", context.getEnvironment().getProperty("logging.kafka.servers"));
+        });
         List<String> _args = new ArrayList<>();
         _args.add(clazz.getName());
         if (args != null && args.length == 0) {
