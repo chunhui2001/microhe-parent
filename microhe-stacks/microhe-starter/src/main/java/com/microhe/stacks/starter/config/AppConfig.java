@@ -11,6 +11,7 @@ import org.springframework.boot.builder.ParentContextApplicationContextInitializ
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.env.EnvironmentPostProcessor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
@@ -33,22 +34,14 @@ public class AppConfig implements ApplicationListener<ApplicationEvent> {
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof ParentContextAvailableEvent) {
-            onApplicationEnvironmentPreparedEvent((ParentContextAvailableEvent) event);
+            ApplicationContext context = ((ParentContextAvailableEvent) event).getApplicationContext();
+            System.setProperty("appName", context.getEnvironment().getProperty("spring.application.name"));
+            System.setProperty("kafkaServers", context.getEnvironment().getProperty("logging.kafka.servers"));
         }
         if (event instanceof ApplicationReadyEvent) {
             LOGGER.info("Spring Boot. ({}) {} 已启动, tomcatBasedir={}, 端口={} ", getVersion(),
                     ThreadContext.get("appname"), this.getTomcatHome(), getTomcatPort());
         }
-    }
-
-    private void onApplicationEnvironmentPreparedEvent(ParentContextAvailableEvent event) {
-        System.setProperty("appName", event.getApplicationContext().getEnvironment().getProperty("spring.application.name"));
-        System.setProperty("kafkaServers", event.getApplicationContext().getEnvironment().getProperty("logging.kafka.servers"));
-    }
-
-    List<EnvironmentPostProcessor> loadPostProcessors() {
-        return SpringFactoriesLoader.loadFactories(EnvironmentPostProcessor.class,
-                getClass().getClassLoader());
     }
 
     /**
