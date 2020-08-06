@@ -9,16 +9,21 @@ spring:
 spring:
   profiles: local,dev-local
 logging:
-  config: classpath:log4j2-local.xml
+  config: classpath:log4j2-console.xml
   kafka.servers: localhost:9092
   
 
 ---
 spring:
-  profiles: test-1, test-2
+  profiles: test, prd
 logging:
-  config: classpath:log4j2-test.xml
+  config: classpath:log4j2-kafka.xml
   kafka.servers: localhost:9092
     
-# java -Dspring.profiles.active=test-1 -Dkafka.bootstrap.servers=localhost:9092 -Dspring.application.name=microhe-starter -jar target/microhe-starter-1.0-SNAPSHOT.jar 
+### log4j2.xml 默认不支持读取环境变量, 也不支持 springProfile 和 springProperty
+### 可利用 ApplicationListener#ParentContextAvailableEvent 定义系统环境变量
+### 如果 log4j2.xml 使用了 kafkaAppender 需通过启动参数传递 kafka.bootstrap.servers
+
+### /usr/local/kafka/bin/kafka-console-consumer.sh --bootstrap-server 172.28.128.3:9092 --topic first-topic --from-beginning
 # java -Dspring.profiles.active=local -Dkafka.bootstrap.servers=localhost:8092 -Dspring.application.name=microhe-starter -jar target/microhe-starter-1.0-SNAPSHOT.jar
+# java -Dspring.profiles.active=test -Dkafka.bootstrap.servers=localhost:9092 -Dspring.application.name=microhe-starter -jar target/microhe-starter-1.0-SNAPSHOT.jar 

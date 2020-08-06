@@ -7,10 +7,6 @@
         <property name="instance">${sys:spring.application.name}</property>
         <property name="ENV">${sys:spring.profiles.active}</property>
         <property name="KAFKA_SERVERS">${sys:kafka.bootstrap.servers}</property>
-        <!-- <property name="KAFKA_SERVERS">localhost:9092</property> -->
-        <!-- property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t][${ctx:appname}:_lid:%lid] %-5level %20.30c{1.}:%L - %M:『%r』>>> %msg%n</property-->
-        <!-- property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t][${ctx:appname}:_lid:%lid] %-5level [%20.30c{1.}:%L]『%r』 > %msg%n</property -->
-        <property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t][${instance}:_lid:%dd] %-5level [%logger{36}:%L]『%r』 > %msg%n</property>
     </properties>
     <Appenders>
         <!-- trace, info, warn, debug, error -->
@@ -39,7 +35,6 @@
         </Root>
         <Logger name="org.springframework" level="WARN" />
         <Logger name="org.springframework.web.servlet.PageNotFound" level="ERROR" />
-        <!-- <Logger name="org.hibernate.validator" level="WARN"/> -->
         <Logger name="org.apache.tomcat" level="INFO" />
         <Logger name="org.apache.catalina" level="INFO" />
         <Logger name="org.apache.coyote" level="INFO" />

@@ -59,6 +59,7 @@
             <artifactId>disruptor</artifactId>
             <version>3.3.8</version>
         </dependency>
+        <!-- log4j2 end -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
